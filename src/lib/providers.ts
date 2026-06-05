@@ -43,13 +43,14 @@ export type Provider = {
 };
 
 // Buckets fixos vindos da base (Anatel) — representam ponto médio das faixas
-export const ASSINANTES_BUCKETS: { value: string; label: string; match: (a: number) => boolean }[] = [
-  { value: "5k", label: "Até 5 mil", match: a => a > 0 && a < 5000 },
-  { value: "5-20k", label: "5–20 mil", match: a => a >= 5000 && a < 20000 },
-  { value: "20-50k", label: "20–50 mil", match: a => a >= 20000 && a < 50000 },
-  { value: "50-100k", label: "50–100 mil", match: a => a >= 50000 && a < 100000 },
-  { value: "100k+", label: "Mais de 100 mil", match: a => a >= 100000 },
-];
+export const ASSINANTES_BUCKETS: { value: string; label: string; match: (a: number) => boolean }[] =
+  [
+    { value: "5k", label: "Até 5 mil", match: (a) => a > 0 && a < 5000 },
+    { value: "5-20k", label: "5–20 mil", match: (a) => a >= 5000 && a < 20000 },
+    { value: "20-50k", label: "20–50 mil", match: (a) => a >= 20000 && a < 50000 },
+    { value: "50-100k", label: "50–100 mil", match: (a) => a >= 50000 && a < 100000 },
+    { value: "100k+", label: "Mais de 100 mil", match: (a) => a >= 100000 },
+  ];
 
 import { supabase } from "@/integrations/supabase/client";
 
@@ -95,5 +96,9 @@ export function formatCNPJ(v: string | null | undefined): string {
 
 export function formatBRL(n: number | null | undefined): string {
   if (n == null) return "—";
-  return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
+  return n.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    maximumFractionDigits: 0,
+  });
 }

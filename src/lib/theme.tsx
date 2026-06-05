@@ -14,8 +14,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (typeof document === "undefined") return;
     document.documentElement.dataset.theme = mode;
-    try { localStorage.setItem("theme-mode", mode); } catch {}
+    try {
+      localStorage.setItem("theme-mode", mode);
+    } catch {}
   }, [mode]);
-  return <Ctx.Provider value={{ mode, toggle: () => setMode(m => m === "dark" ? "light" : "dark") }}>{children}</Ctx.Provider>;
+  return (
+    <Ctx.Provider value={{ mode, toggle: () => setMode((m) => (m === "dark" ? "light" : "dark")) }}>
+      {children}
+    </Ctx.Provider>
+  );
 }
 export const useTheme = () => useContext(Ctx);

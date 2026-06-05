@@ -73,20 +73,43 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Inteligência de Mercado ISP — Supercomm" },
-      { name: "description", content: "Painel estratégico de inteligência competitiva e oportunidades comerciais no mercado de provedores de internet." },
+      {
+        name: "description",
+        content:
+          "Painel estratégico de inteligência competitiva e oportunidades comerciais no mercado de provedores de internet.",
+      },
       { property: "og:title", content: "Inteligência de Mercado ISP — Supercomm" },
       { name: "twitter:title", content: "Inteligência de Mercado ISP — Supercomm" },
-      { property: "og:description", content: "Painel estratégico de inteligência competitiva e oportunidades comerciais no mercado de provedores de internet." },
-      { name: "twitter:description", content: "Painel estratégico de inteligência competitiva e oportunidades comerciais no mercado de provedores de internet." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/7d6a24da-84ff-4d02-a35e-344b53d60ed6/id-preview-a866e24e--29a19a97-9730-4150-987d-5489cb801153.lovable.app-1779126032949.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/7d6a24da-84ff-4d02-a35e-344b53d60ed6/id-preview-a866e24e--29a19a97-9730-4150-987d-5489cb801153.lovable.app-1779126032949.png" },
+      {
+        property: "og:description",
+        content:
+          "Painel estratégico de inteligência competitiva e oportunidades comerciais no mercado de provedores de internet.",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Painel estratégico de inteligência competitiva e oportunidades comerciais no mercado de provedores de internet.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/7d6a24da-84ff-4d02-a35e-344b53d60ed6/id-preview-a866e24e--29a19a97-9730-4150-987d-5489cb801153.lovable.app-1779126032949.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/7d6a24da-84ff-4d02-a35e-344b53d60ed6/id-preview-a866e24e--29a19a97-9730-4150-987d-5489cb801153.lovable.app-1779126032949.png",
+      },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:type", content: "website" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap",
+      },
       {
         rel: "stylesheet",
         href: appCss,
@@ -121,7 +144,17 @@ function AuthGate() {
   const { loading, session } = useAuth();
   if (loading) {
     return (
-      <div style={{ minHeight: "100vh", background: "var(--bg)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text3)", fontSize: 13 }}>
+      <div
+        style={{
+          minHeight: "100vh",
+          background: "var(--bg)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "var(--text3)",
+          fontSize: 13,
+        }}
+      >
         Carregando...
       </div>
     );
@@ -143,4 +176,3 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
-
