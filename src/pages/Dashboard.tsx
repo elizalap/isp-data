@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Provider, loadProviders, ASSINANTES_BUCKETS } from "@/lib/providers";
 import { ProviderTable } from "@/components/ProviderTable";
@@ -27,26 +26,20 @@ import {
   Mail,
   ShieldCheck,
   Target,
-  Sun,
-  Moon,
   Download,
   FileDown,
-  LogOut,
 } from "lucide-react";
 import { Navbar } from "@/components/NavBar";
-
-export const Route = createFileRoute("/")({ component: Dashboard });
 
 type ProductFilter = "" | "celeti" | "hub" | "cdn" | "rami";
 type PotentialFilter = "" | "celeti" | "hub" | "cdn" | "rami" | "any";
 
-function Dashboard() {
+export function Dashboard() {
   const { mode, toggle } = useTheme();
   const { user, signOut } = useAuth();
   const [data, setData] = useState<Provider[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Filtros globais
   const [ufs, setUfs] = useState<string[]>([]);
   const [porte, setPorte] = useState("");
   const [erp, setErp] = useState("");
@@ -219,6 +212,7 @@ function Dashboard() {
     });
     downloadCsv(`provedores_visao_${Date.now()}.csv`, toCsv(rows as any));
   }
+
   function exportLeads() {
     const rows = filtered
       .filter((p) => {
@@ -255,7 +249,6 @@ function Dashboard() {
           </div>
         )}
 
-        {/* a) Filtros globais */}
         <div style={filtersWrap}>
           <FG label="UF">
             <MultiSelect options={dims.ufList} value={ufs} onChange={setUfs} placeholder="Todas" />
@@ -435,7 +428,6 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* b) KPIs */}
         <div
           style={{
             display: "grid",
@@ -502,13 +494,10 @@ function Dashboard() {
           />
         </div>
 
-        {/* Explicação do score */}
         <ScoreExplainer />
 
-        {/* c) Gráficos */}
         {data ? <ChartsRow providers={filtered} /> : <SkeletonRows />}
 
-        {/* d) Mapa */}
         {data && (
           <BrazilMap
             providers={filtered}
@@ -530,7 +519,6 @@ function Dashboard() {
           />
         )}
 
-        {/* e) Atalhos de prospecção rápida */}
         <QuickShortcuts
           data={data}
           potencial={potencial}
@@ -538,7 +526,6 @@ function Dashboard() {
           listRef={listRef}
         />
 
-        {/* f) Lista de provedores */}
         <div
           ref={listRef}
           style={{
@@ -565,7 +552,6 @@ function Dashboard() {
           {data ? <ProviderTable rows={filtered} onSelect={setSelected} /> : <SkeletonRows />}
         </div>
 
-        {/* Potencial CDN */}
         {data && <CdnPotentialSection providers={data} onSelect={setSelected} />}
       </main>
 
@@ -799,15 +785,4 @@ const btnPrimary: React.CSSProperties = {
   display: "inline-flex",
   alignItems: "center",
   gap: 6,
-};
-const iconBtn: React.CSSProperties = {
-  background: "var(--bg3)",
-  border: "1px solid var(--border-c)",
-  color: "var(--text)",
-  borderRadius: 6,
-  padding: "6px 8px",
-  cursor: "pointer",
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
 };

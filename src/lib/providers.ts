@@ -52,8 +52,6 @@ export const ASSINANTES_BUCKETS: { value: string; label: string; match: (a: numb
     { value: "100k+", label: "Mais de 100 mil", match: (a) => a >= 100000 },
   ];
 
-import { supabase } from "@/integrations/supabase/client";
-
 let cache: Provider[] | null = null;
 
 const PAGE = 1000;
@@ -61,20 +59,19 @@ const PAGE = 1000;
 export async function loadProviders(): Promise<Provider[]> {
   if (cache) return cache;
   const all: Provider[] = [];
-  let from = 0;
-  // Paginação para superar o limite padrão de 1000 linhas do PostgREST
-  // eslint-disable-next-line no-constant-condition
+  let page = 1;
+
   while (true) {
-    const { data, error } = await supabase
-      .from("base_isp_final")
-      .select("*")
-      .range(from, from + PAGE - 1);
-    if (error) throw new Error(error.message);
+    const { data } = await api.get("/providers", {
+      params: { page, per_page: 1000 },
+    });
+
     if (!data || data.length === 0) break;
-    all.push(...(data as unknown as Provider[]));
-    if (data.length < PAGE) break;
-    from += PAGE;
+    all.push(...(data as Provider[]));
+    if (data.length < 1000) break;
+    page++;
   }
+
   cache = all;
   return cache;
 }

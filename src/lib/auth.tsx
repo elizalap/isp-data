@@ -1,10 +1,15 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import type { Session, User } from "@supabase/supabase-js";
-import { supabase } from "@/integrations/supabase/client";
+import api from "@/lib/api";
+
+type User = {
+  id: number;
+  name: string;
+  email: string;
+};
 
 type AuthCtx = {
   loading: boolean;
-  session: Session | null;
+  session: string | null; // token JWT
   user: User | null;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -13,38 +18,48 @@ type AuthCtx = {
 const Ctx = createContext<AuthCtx | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Listener PRIMEIRO, depois getSession (evita race)
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
-      setSession(s);
+    // Verifica se há token salvo e valida com a API
+    const token = localStorage.getItem("token");
+    if (!token) {
       setLoading(false);
-    });
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-      setLoading(false);
-    });
-    return () => sub.subscription.unsubscribe();
+      return;
+    }
+
+    setSession(token);
+    api
+      .get("/me") // endpoint Laravel que retorna o usuário autenticado
+      .then((r) => setUser(r.data))
+      .catch(() => {
+        // Token inválido ou expirado
+        localStorage.removeItem("token");
+        setSession(null);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
+  // TODO: substituir pelo fluxo OAuth real do Laravel (Socialite + Google)
+  // Por enquanto redireciona para a rota de login social do backend
   const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: window.location.origin },
-    });
-    if (error) throw error;
+    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google/redirect`;
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    try {
+      await api.post("/logout");
+    } finally {
+      localStorage.removeItem("token");
+      setSession(null);
+      setUser(null);
+    }
   };
 
   return (
-    <Ctx.Provider
-      value={{ loading, session, user: session?.user ?? null, signInWithGoogle, signOut }}
-    >
+    <Ctx.Provider value={{ loading, session, user, signInWithGoogle, signOut }}>
       {children}
     </Ctx.Provider>
   );

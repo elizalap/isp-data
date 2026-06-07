@@ -1,7 +1,7 @@
 import { Sun, Moon } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "@tanstack/react-router";
+// import { supabase } from "@/integrations/supabase/client";
+// import { useNavigate } from "@tanstack/react-router";
 
 const iconBtn: React.CSSProperties = {
   background: "none",
@@ -27,20 +27,20 @@ export function Navbar({ providerCount, mode, toggle }: NavbarProps) {
     null,
   );
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        const meta = session.user.user_metadata;
-        setUser({
-          name: meta?.full_name ?? meta?.name ?? session.user.email ?? "",
-          email: session.user.email ?? "",
-          avatar: meta?.avatar_url ?? meta?.picture ?? null,
-        });
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   supabase.auth.getSession().then(({ data: { session } }) => {
+  //     if (session?.user) {
+  //       const meta = session.user.user_metadata;
+  //       setUser({
+  //         name: meta?.full_name ?? meta?.name ?? session.user.email ?? "",
+  //         email: session.user.email ?? "",
+  //         avatar: meta?.avatar_url ?? meta?.picture ?? null,
+  //       });
+  //     }
+  //   });
+  // }, []);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -52,10 +52,10 @@ export function Navbar({ providerCount, mode, toggle }: NavbarProps) {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    navigate({ to: "/login" });
-  };
+  // const handleSignOut = async () => {
+  //   await supabase.auth.signOut();
+  //   navigate({ to: "/login" });
+  // };
 
   const initials = user?.name
     ? user.name
