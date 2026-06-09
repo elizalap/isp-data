@@ -229,8 +229,37 @@ export function ProviderDrawer({ p, onClose }: { p: Provider | null; onClose: ()
         <Row label="Total de Assinantes" value={p.assinantes?.toLocaleString("pt-BR")} />
         <Row
           label="PTT mais próximo"
-          value={ptt ? `${ptt.ptt} · ${ptt.km.toLocaleString("pt-BR")} km` : null}
+          value={
+            p.distancia_km != null
+              ? `${p.ptt_proximo ?? ptt?.ptt ?? "—"} · ${p.distancia_km.toLocaleString("pt-BR")} km`
+              : ptt
+                ? `${ptt.ptt} · ${ptt.km.toLocaleString("pt-BR")} km`
+                : null
+          }
         />
+        <Row
+          label="Velocidade (download)"
+          value={
+            p.ookla_download_mbps != null
+              ? `${p.ookla_download_mbps.toLocaleString("pt-BR")} Mbps`
+              : null
+          }
+        />
+        <Row
+          label="Velocidade (upload)"
+          value={
+            p.ookla_upload_mbps != null
+              ? `${p.ookla_upload_mbps.toLocaleString("pt-BR")} Mbps`
+              : null
+          }
+        />
+        <Row
+          label="Latência"
+          value={
+            p.ookla_latencia_ms != null ? `${p.ookla_latencia_ms.toLocaleString("pt-BR")} ms` : null
+          }
+        />
+        <Row label="Fonte da velocidade" value={p.ookla_fonte} />
 
         <h3 style={sectionStyle}>Societário</h3>
         <Row label="Sócio" value={p.socio} />

@@ -22,9 +22,10 @@ export function CdnPotentialSection({
     const out: Row[] = [];
     for (const p of providers) {
       if (p.cdn) continue; // só potenciais
-      const np = nearestPTT(p.uf);
-      if (!np) continue;
-      out.push({ ...p, _ptt: np.ptt, _km: np.km, _prio: cdnPriority(np.km) });
+      const km = p.distancia_km ?? nearestPTT(p.uf)?.km ?? null;
+      const ptt = p.ptt_proximo ?? nearestPTT(p.uf)?.ptt ?? null;
+      if (km == null || !ptt) continue;
+      out.push({ ...p, _ptt: ptt, _km: km, _prio: cdnPriority(km) });
     }
     return out;
   }, [providers]);

@@ -40,6 +40,13 @@ export type Provider = {
   ptt_proximo: string | null;
   distancia_km: number | null;
   score: string | null;
+
+  ookla_download_mbps: number | null;
+  ookla_upload_mbps: number | null;
+  ookla_latencia_ms: number | null;
+  ookla_fonte: string | null; // "Tiles_Municipio" (real) | "Media_UF" | "Media_Brasil"
+  ookla_tiles: number | null;
+  conectado_ixbr_corrigido: boolean | null;
 };
 
 // Buckets fixos vindos da base (Anatel) — representam ponto médio das faixas

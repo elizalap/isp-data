@@ -208,7 +208,12 @@ export function Dashboard() {
     if (!filtered.length) return;
     const rows = filtered.map((p) => {
       const np = nearestPTT(p.uf);
-      return { ...p, score: providerScore(p), ptt_proximo: np?.ptt, distancia_km: np?.km };
+      return {
+        ...p,
+        score: providerScore(p),
+        ptt_proximo: p.ptt_proximo ?? np?.ptt,
+        distancia_km: p.distancia_km ?? np?.km,
+      };
     });
     downloadCsv(`provedores_visao_${Date.now()}.csv`, toCsv(rows as any));
   }
@@ -223,7 +228,12 @@ export function Dashboard() {
       })
       .map((p) => {
         const np = nearestPTT(p.uf);
-        return { ...p, score: providerScore(p), ptt_proximo: np?.ptt, distancia_km: np?.km };
+        return {
+          ...p,
+          score: providerScore(p),
+          ptt_proximo: p.ptt_proximo ?? np?.ptt,
+          distancia_km: p.distancia_km ?? np?.km,
+        };
       });
     if (!rows.length) return alert("Nenhum lead qualificado na visão atual.");
     downloadCsv(`leads_qualificados_${Date.now()}.csv`, toCsv(rows as any));

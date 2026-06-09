@@ -131,10 +131,29 @@ export function BrazilMap({
       if (!p.cdn) naoCdn[p.uf] = (naoCdn[p.uf] || 0) + 1;
       if (p.asn != null) asn[p.uf] = (asn[p.uf] || 0) + 1;
     });
+    // Por UF: PTT mais comum entre os provedores (real) + distância média real por município.
+    // Fallback para a aproximação por capital quando não há provedor na UF.
     const ptt: Record<string, { name: string; km: number }> = {};
+    const acc: Record<string, { kmSum: number; n: number; names: Record<string, number> }> = {};
+    providers.forEach((p) => {
+      if (!p.uf) return;
+      const km = p.distancia_km ?? nearestPTT(p.uf)?.km;
+      const name = p.ptt_proximo ?? nearestPTT(p.uf)?.ptt;
+      if (km == null || !name) return;
+      const a = acc[p.uf] ?? (acc[p.uf] = { kmSum: 0, n: 0, names: {} });
+      a.kmSum += km;
+      a.n += 1;
+      a.names[name] = (a.names[name] || 0) + 1;
+    });
+    Object.entries(acc).forEach(([uf, a]) => {
+      const name = Object.entries(a.names).sort((x, y) => y[1] - x[1])[0][0];
+      ptt[uf] = { name, km: Math.round(a.kmSum / a.n) };
+    });
     Object.keys(UF_COORDS).forEach((uf) => {
-      const n = nearestPTT(uf);
-      if (n) ptt[uf] = { name: n.ptt, km: n.km };
+      if (!ptt[uf]) {
+        const n = nearestPTT(uf);
+        if (n) ptt[uf] = { name: n.ptt, km: n.km };
+      }
     });
     // ASNs agrupados por PTT (com base no PTT mais próximo da UF)
     const asnByPtt: Record<

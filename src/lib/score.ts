@@ -8,7 +8,7 @@ const PORTE_MG = /m[eé]dio|grande|demais/i;
 const PORTE_P = /pequeno|micro|me$|mei/i;
 
 export function providerScore(p: Provider): Score {
-  const km = nearestPTT(p.uf)?.km ?? 0;
+  const km = p.distancia_km ?? nearestPTT(p.uf)?.km ?? 0;
   const ass = p.assinantes ?? 0;
   const naoCdn = !p.cdn,
     naoHub = !p.hub;
@@ -45,7 +45,7 @@ export function scoreLabel(s: Score): string {
 
 export function abordagemRecomendada(p: Provider): string[] {
   const tips: string[] = [];
-  const km = nearestPTT(p.uf)?.km ?? 0;
+  const km = p.distancia_km ?? nearestPTT(p.uf)?.km ?? 0;
   const ass = p.assinantes ?? 0;
   const porte = p.porte || "";
   if (!p.cdn && km > 800) {
